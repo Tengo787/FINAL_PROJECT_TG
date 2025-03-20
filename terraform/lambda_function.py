@@ -21,12 +21,12 @@ def lambda_handler(event, context):
         file_name = event["Records"][0]["s3"]["object"]["key"]
         logger.info(f"🔄 File detected: {file_name} in {BRONZE_BUCKET}")
 
-        # Bronze → Silver გადატანა
+
         copy_source = {"Bucket": BRONZE_BUCKET, "Key": file_name}
         s3.copy_object(CopySource=copy_source, Bucket=SILVER_BUCKET, Key=file_name)
         logger.info(f"✅ File copied to Silver: {file_name}")
 
-        # Silver → Gold გადატანა
+
         copy_source = {"Bucket": SILVER_BUCKET, "Key": file_name}
         s3.copy_object(CopySource=copy_source, Bucket=GOLD_BUCKET, Key=file_name)
         logger.info(f"✅ File copied to Gold: {file_name}")
